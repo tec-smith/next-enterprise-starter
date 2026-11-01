@@ -1,0 +1,34 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # Upgrade these together; their versions are coupled.
+      prisma:
+        patterns: ["prisma", "@prisma/*"]
+      testing:
+        patterns:
+          [
+            "vitest",
+            "@vitest/*",
+            "@testing-library/*",
+            "@playwright/test",
+            "jsdom",
+          ]
+      lint:
+        patterns: ["eslint", "eslint-*", "prettier", "prettier-*"]
+    ignore:
+      # Major upgrades of the framework and ORM need a manual migration.
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "prisma"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@prisma/client"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
